@@ -12,5 +12,6 @@ type SearchController struct {
 func (c *SearchController) Get() {
 	keyword := c.Input().Get("keyword")
 	fmt.Println(keyword)
+	c.Data["Title"] = beego.AppConfig.DefaultString("title","书库")
 	c.TplName = "search.html"
 }

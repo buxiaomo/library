@@ -1,6 +1,6 @@
 <html>
   <head>
-    <title>沫沫の书库</title>
+    <title>{{ .Title }}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -12,7 +12,7 @@
     <div class="s006">
       <form id="search" action="/search">
         <fieldset>
-          <legend><a href="/index" style="TEXT-DECORATION:none">沫沫の书库</a></legend>
+          <legend><a href="/" style="TEXT-DECORATION:none">{{ .Title }}</a></legend>
           <div class="inner-form">
             <div class="input-field">
               <button class="btn-search" type="button">

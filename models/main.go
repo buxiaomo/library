@@ -25,7 +25,7 @@ func DBInitNew() *DBInit {
 
 func (dbInit *DBInit) InitDatabase() {
 	if dbInit.Db == nil {
-		dbType := beego.AppConfig.String("dbType")
+		dbType := beego.AppConfig.String("dbtype")
 		sqlConn := beego.AppConfig.String("sqlconn")
 		maxIdle, _ := beego.AppConfig.Int("maxIdle")
 		maxConn, _ := beego.AppConfig.Int("maxConn")
@@ -43,13 +43,11 @@ func (dbInit *DBInit) InitDatabase() {
 
 func init() {
 	DBInitNew().InitDatabase()
-	orm.RegisterModel(new(Books))
+	orm.RegisterModel(new(Book), new(Metadata))
 	err := orm.RunSyncdb("default", false, true)
 	if err != nil {
 		logs.Error(err.Error())
 	}
 	o = orm.NewOrm()
 	o.Using("default")
-
-	//initTable()
 }
