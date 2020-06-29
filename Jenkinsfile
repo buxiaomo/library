@@ -5,7 +5,6 @@ pipeline {
 
     environment {
         PROJECT_NAME="buxiaomo"
-        APPLICATION_NAME="library"
 
         REPOSITORY_URL = "https://github.com/buxiaomo/library.git"
 
@@ -29,7 +28,7 @@ pipeline {
         stage('build') {
             steps {
                 container('dockerd') {
-                    sh label: 'Docker Image', script: "docker build -t ${env.REGISTRY_URL}/${env.PROJECT_NAME}/${env.APPLICATION_NAME}:${BUILD_ID} -f ${env.Dockerfile} ."
+                    sh label: 'Docker Image', script: "docker build -t ${env.REGISTRY_URL}/${env.PROJECT_NAME}/${JOB_NAME}:${BUILD_ID} -f ${env.Dockerfile} ."
                 }
             }
         }
@@ -37,7 +36,7 @@ pipeline {
         stage('push') {
             steps {
                 container('dockerd') {
-                    sh label: 'Docker', script: "docker push ${env.REGISTRY_URL}/${env.PROJECT_NAME}/${env.APPLICATION_NAME}:${BUILD_ID}"
+                    sh label: 'Docker', script: "docker push ${env.REGISTRY_URL}/${env.PROJECT_NAME}/${JOB_NAME}:${BUILD_ID}"
                 }
             }
         }
@@ -49,7 +48,7 @@ pipeline {
             steps {
                 container('kubectl') {
                     sh label: 'namespace', script: "kubectl get ns ${env.PROJECT_NAME}-dev || kubectl create ns ${env.PROJECT_NAME}-dev"
-                    sh label: 'change tag', script: "sed -i \"s#APPLICATION_NAME#${env.APPLICATION_NAME}#\" ./manifests/deployment.yaml"
+                    sh label: 'change tag', script: "sed -i \"s#APPLICATION_NAME#${JOB_NAME}#\" ./manifests/deployment.yaml"
                     sh label: 'change tag', script: "sed -i \"s#PROJECT_NAME#${env.PROJECT_NAME}#\" ./manifests/deployment.yaml"
                     sh label: 'change tag', script: "sed -i \"s#REGISTRY_URL#${env.REGISTRY_URL}#\" ./manifests/deployment.yaml"
                     sh label: 'change tag', script: "sed -i \"s#IMAGE_TAG#${BUILD_ID}#\" ./manifests/deployment.yaml"
